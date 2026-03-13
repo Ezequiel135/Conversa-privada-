@@ -1,33 +1,35 @@
-import { useState } from 'react';
 import { motion } from 'motion/react';
+import { ArrowLeft, Phone, Video, MoreVertical } from 'lucide-react';
 import { Chat } from './Chat';
 
-export function ChatLayout({ room }: { room: string }) {
+export function ChatLayout({ room, onBack }: { room: string; onBack: () => void }) {
   return (
-    <div className="flex h-screen bg-stone-50 dark:bg-stone-950">
-      {/* Left Panel */}
-      <motion.div 
-        initial={{ x: -200 }}
-        animate={{ x: 0 }}
-        className="w-64 border-r border-stone-200 dark:border-stone-800 p-4 hidden md:block"
-      >
-        <h2 className="text-xl font-display font-bold text-stone-900 dark:text-stone-100">Room: {room}</h2>
-        <div className="mt-4 text-stone-500">Users (1)</div>
-      </motion.div>
-
+    <div className="flex h-screen bg-[#ECE5DD] dark:bg-stone-950">
       {/* Center Panel */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col h-full">
+        {/* WhatsApp Header */}
+        <div className="bg-[#075E54] text-white p-3 flex items-center justify-between shadow-md z-10">
+          <div className="flex items-center gap-2">
+            <button onClick={onBack} className="p-1 hover:bg-white/10 rounded-full transition-colors">
+              <ArrowLeft size={24} />
+            </button>
+            <div className="w-10 h-10 bg-stone-200 rounded-full flex items-center justify-center">
+              <span className="text-[#075E54] font-bold">{room[0].toUpperCase()}</span>
+            </div>
+            <div>
+              <h2 className="font-semibold leading-tight">{room}</h2>
+              <span className="text-xs opacity-80">online</span>
+            </div>
+          </div>
+          <div className="flex gap-4">
+            <Video size={20} />
+            <Phone size={20} />
+            <MoreVertical size={20} />
+          </div>
+        </div>
+
         <Chat room={room} />
       </div>
-
-      {/* Right Panel */}
-      <motion.div 
-        initial={{ x: 200 }}
-        animate={{ x: 0 }}
-        className="w-64 border-l border-stone-200 dark:border-stone-800 p-4 hidden lg:block"
-      >
-        <h2 className="text-xl font-display font-bold text-stone-900 dark:text-stone-100">Controls</h2>
-      </motion.div>
     </div>
   );
 }

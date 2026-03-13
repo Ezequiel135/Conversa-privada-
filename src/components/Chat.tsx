@@ -70,25 +70,44 @@ export function Chat({ room }: { room: string }) {
   }, [room]);
 
   return (
-    <div className="flex-1 flex flex-col h-full">
-      <div className="flex-1 p-4 overflow-y-auto">
+    <div className="flex-1 flex flex-col h-full relative overflow-hidden">
+      {/* WhatsApp Background Pattern */}
+      <div 
+        className="absolute inset-0 opacity-[0.06] pointer-events-none dark:opacity-[0.03]" 
+        style={{ backgroundImage: 'url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png")' }}
+      />
+      
+      <div className="flex-1 p-4 overflow-y-auto z-10">
         {messages.map((msg) => (
           <div key={msg.id} onContextMenu={(e) => { e.preventDefault(); setReactionTarget(msg.id); }} className="relative">
             <MessageBubble message={msg} isOwn={msg.sender === socket.id} />
-            {reactionTarget === msg.id && <ReactionPicker onSelect={(e) => addReaction(msg.id, e)} />}
+            {reactionTarget === msg.id && (
+              <div className="absolute top-0 left-0 z-50">
+                <ReactionPicker onSelect={(e) => addReaction(msg.id, e)} />
+              </div>
+            )}
           </div>
         ))}
       </div>
-      <div className="p-4 border-t border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900">
+      
+      <div className="p-2 bg-[#f0f2f5] dark:bg-[#1e2428] z-10">
         <TypingIndicator users={typingUsers} />
-        <div className="flex gap-2">
-          <input 
-            value={input} 
-            onChange={handleTyping} 
-            className="flex-1 p-3 rounded-xl border border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 outline-none"
-            placeholder="Type a message..."
-          />
-          <button onClick={sendMessage} className="bg-emerald-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-emerald-700 transition-all">Send</button>
+        <div className="flex gap-2 items-center">
+          <div className="flex-1 bg-white dark:bg-[#2a2f32] rounded-full px-4 py-2 flex items-center shadow-sm">
+            <input 
+              value={input} 
+              onChange={handleTyping} 
+              onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+              className="flex-1 bg-transparent outline-none text-[15px] dark:text-stone-100"
+              placeholder="Type a message"
+            />
+          </div>
+          <button 
+            onClick={sendMessage} 
+            className="bg-[#00a884] text-white p-3 rounded-full flex items-center justify-center shadow-md hover:bg-[#008f6f] transition-colors"
+          >
+            <Plus size={24} className={input.length > 0 ? 'rotate-45 transition-transform' : ''} />
+          </button>
         </div>
       </div>
     </div>
