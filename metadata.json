@@ -1,0 +1,5 @@
+{
+  "name": "TempChat",
+  "description": "A real-time, temporary, and private communication platform for chat, media sharing, and voice/video calls.",
+  "requestFramePermissions": ["camera", "microphone"]
+}
